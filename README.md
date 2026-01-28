@@ -10,7 +10,17 @@ cd beadhouse
 ./install
 ```
 
-Requires: `git`, `jq`, `gh` (GitHub CLI), `bd` (bead CLI)
+## Prerequisites
+
+| Tool | What it's for | Install |
+|------|--------------|---------|
+| [Claude Code](https://claude.ai/code) | AI agent that runs the commands | `npm install -g @anthropic-ai/claude-code` |
+| [beads](https://github.com/nsa-brant/beads) (`bd`) | Task/ticket system | See beads repo |
+| [git](https://git-scm.com/) | Worktree creation, branching | Pre-installed on most systems |
+| [jq](https://jqlang.github.io/jq/) | JSON parsing in `work-bead` script | `brew install jq` |
+| [GitHub CLI](https://cli.github.com/) (`gh`) | PR creation, CI monitoring, merging | `brew install gh` |
+
+## What the install script does
 
 The install script symlinks:
 - `/create-bead`, `/work-bead`, `/close-bead`, `/beadhouse` → `~/.claude/commands/`
@@ -74,6 +84,8 @@ Lives at the root of each project repo. Tells `work-bead` how to set up worktree
 | `warnings` | `[]` | Replicability warnings detected by `/beadhouse` |
 
 All fields are optional. Omit any that match the default.
+
+> **Security note:** Claude only detects `.env` filenames during `/beadhouse` — it never reads their contents. The `work-bead` shell script copies them into worktrees using `cp`, so secrets stay out of Claude's context.
 
 ### Template variables
 
