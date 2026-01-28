@@ -36,11 +36,9 @@ If yes:
 
 If no, just report the bead ID and tell the user they can run `/work-bead <bead-id>` later.
 
-### 5. Offer to launch Claude in worktree
-If the user started working (step 4 = yes), ask: "Would you like to open a new Claude Code session in the worktree?"
-
-If yes, run:
+### 5. Switch to worktree
+If the user started working (step 4 = yes), `cd` into the worktree directory so all subsequent work happens there:
 ```bash
-osascript -e 'tell application "Terminal" to do script "cd <worktree-path> && claude"'
+cd <worktree-path>
 ```
-Use the absolute worktree path. This opens a new Terminal tab with Claude running in the worktree directory.
+Confirm to the user that you're now working in the worktree.
