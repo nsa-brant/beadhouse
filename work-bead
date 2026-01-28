@@ -2,7 +2,7 @@
 set -euo pipefail
 
 usage() {
-  echo "Usage: work-bead <repo-path> <branch-name> <slug>" >&2
+  echo "Usage: work-bead <repo-path> <branch-name> <slug> [start-point]" >&2
   exit 1
 }
 
@@ -11,6 +11,7 @@ usage() {
 REPO_PATH="$1"
 BRANCH_NAME="$2"
 SLUG="$3"
+START_POINT="${4:-}"
 
 CONFIG="$REPO_PATH/beadhouse.json"
 if [[ ! -f "$CONFIG" ]]; then
@@ -39,23 +40,13 @@ if [[ -d "$WORKTREE_PATH" ]]; then
   exit 0
 fi
 
-# Determine base branch (main or master)
-BASE_BRANCH=$(git -C "$REPO_PATH" remote show origin 2>/dev/null | grep 'HEAD branch' | awk '{print $NF}')
-if [[ -z "$BASE_BRANCH" ]]; then
-  # Fallback: check if main or master exists locally
-  if git -C "$REPO_PATH" rev-parse --verify main >/dev/null 2>&1; then
-    BASE_BRANCH="main"
-  else
-    BASE_BRANCH="master"
-  fi
-fi
-
-# Fetch latest base branch
-git -C "$REPO_PATH" fetch origin "$BASE_BRANCH" --quiet 2>/dev/null || true
-
-# Create worktree branching from the base branch
+# Create worktree
 mkdir -p "$(dirname "$WORKTREE_PATH")"
-git -C "$REPO_PATH" worktree add "$WORKTREE_PATH" -b "$BRANCH_NAME" "origin/$BASE_BRANCH" 2>&1
+if [[ -n "$START_POINT" ]]; then
+  git -C "$REPO_PATH" worktree add "$WORKTREE_PATH" -b "$BRANCH_NAME" "$START_POINT" 2>&1
+else
+  git -C "$REPO_PATH" worktree add "$WORKTREE_PATH" -b "$BRANCH_NAME" 2>&1
+fi
 
 # Copy env files
 while IFS= read -r envfile; do

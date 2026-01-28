@@ -30,9 +30,10 @@ If yes:
 1. Check that `beadhouse.json` exists at the current repo root. If not, tell the user to run `/beadhouse` first and stop.
 2. Slugify the title: lowercase, replace non-alphanumeric with hyphens, collapse multiple hyphens, trim leading/trailing hyphens. Max 50 chars.
 3. Read `beadhouse.json` and resolve the branch name using `branchPattern` (default: `{{slug}}`). Replace `{{slug}}` with the slug, `{{bead-id}}` with the raw bead ID, `{{project}}` with the repo directory name.
-4. Run: `work-bead <repo-root> <branch-name> <slug>`
-5. Run: `bd pin <bead-id> --for me --start`
-6. Report: worktree path, bead title, branch name, and what was set up.
+4. **Choose base branch.** Check what branch is currently checked out (`git branch --show-current`). Determine the default branch (`git remote show origin | grep 'HEAD branch'`). If the repo is on the default branch, use `origin/<default-branch>` (fetch first). If on a different branch, ask the user: "Branch from `<current-branch>` or `<default-branch>`?"
+5. Run: `work-bead <repo-root> <branch-name> <slug> [start-point]`
+6. Run: `bd pin <bead-id> --for me --start`
+7. Report: worktree path, bead title, branch name, base branch, and what was set up.
 
 If no, just report the bead ID and tell the user they can run `/work-bead <bead-id>` later.
 
