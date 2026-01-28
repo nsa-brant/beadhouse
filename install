@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+COMMANDS_DIR="$HOME/.claude/commands"
+BIN_DIR="$HOME/.local/bin"
+
+# Check dependencies
+for dep in jq git; do
+  if ! command -v "$dep" >/dev/null 2>&1; then
+    echo "Error: $dep is required. Install it first." >&2
+    exit 1
+  fi
+done
+
+# Symlink Claude commands
+mkdir -p "$COMMANDS_DIR"
+for md in "$SCRIPT_DIR"/commands/*.md; do
+  name="$(basename "$md")"
+  target="$COMMANDS_DIR/$name"
+  if [[ -L "$target" ]]; then
+    rm "$target"
+  elif [[ -f "$target" ]]; then
+    echo "  Backing up existing $name → ${name}.bak"
+    mv "$target" "${target}.bak"
+  fi
+  ln -s "$md" "$target"
+  echo "  Linked /$(basename "$name" .md) command"
+done
+
+# Symlink work-bead script
+mkdir -p "$BIN_DIR"
+target="$BIN_DIR/work-bead"
+if [[ -L "$target" ]]; then
+  rm "$target"
+elif [[ -f "$target" ]]; then
+  echo "  Backing up existing work-bead → work-bead.bak"
+  mv "$target" "${target}.bak"
+fi
+ln -s "$SCRIPT_DIR/work-bead" "$target"
+echo "  Linked work-bead to $BIN_DIR"
+
+# Check PATH
+if [[ ":$PATH:" != *":$BIN_DIR:"* ]]; then
+  echo ""
+  echo "Note: $BIN_DIR is not in your PATH."
+  echo "Add this to your shell profile:"
+  echo "  export PATH=\"\$HOME/.local/bin:\$PATH\""
+fi
+
+echo ""
+echo "Beadhouse installed. Claude commands available: /work, /beadhouse"

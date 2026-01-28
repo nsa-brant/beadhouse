@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  echo "Usage: work-bead <repo-path> <branch-name> <slug>" >&2
+  exit 1
+}
+
+[[ $# -ge 3 ]] || usage
+
+REPO_PATH="$1"
+BRANCH_NAME="$2"
+SLUG="$3"
+
+CONFIG="$REPO_PATH/beadhouse.json"
+if [[ ! -f "$CONFIG" ]]; then
+  echo "Error: beadhouse.json not found at $REPO_PATH" >&2
+  exit 1
+fi
+
+command -v jq >/dev/null 2>&1 || { echo "Error: jq is required" >&2; exit 1; }
+
+PROJECT=$(basename "$REPO_PATH")
+
+# Read config with defaults
+WORKTREE_TEMPLATE=$(jq -r '.worktreePath // "~/develop/nsa/worktrees/{{project}}/{{slug}}"' "$CONFIG")
+ENV_FILES=$(jq -r '(.envFiles // [".env"]) | .[]' "$CONFIG")
+SETUP_CMDS=$(jq -r '(.setup // []) | .[]' "$CONFIG")
+
+# Resolve template
+WORKTREE_PATH="$WORKTREE_TEMPLATE"
+WORKTREE_PATH="${WORKTREE_PATH//\{\{project\}\}/$PROJECT}"
+WORKTREE_PATH="${WORKTREE_PATH//\{\{slug\}\}/$SLUG}"
+WORKTREE_PATH="${WORKTREE_PATH/#\~/$HOME}"
+
+# Idempotent: if worktree already exists, just print path
+if [[ -d "$WORKTREE_PATH" ]]; then
+  echo "$WORKTREE_PATH"
+  exit 0
+fi
+
+# Create worktree
+mkdir -p "$(dirname "$WORKTREE_PATH")"
+git -C "$REPO_PATH" worktree add "$WORKTREE_PATH" -b "$BRANCH_NAME" 2>&1
+
+# Copy env files
+while IFS= read -r envfile; do
+  [[ -z "$envfile" ]] && continue
+  src="$REPO_PATH/$envfile"
+  if [[ -f "$src" ]]; then
+    cp "$src" "$WORKTREE_PATH/$envfile"
+  fi
+done <<< "$ENV_FILES"
+
+# Run setup commands
+while IFS= read -r cmd; do
+  [[ -z "$cmd" ]] && continue
+  echo "Running: $cmd"
+  (cd "$WORKTREE_PATH" && eval "$cmd")
+done <<< "$SETUP_CMDS"
+
+echo "$WORKTREE_PATH"
