@@ -5,8 +5,9 @@ Per-project worktree config for beads. Clone, install, and Claude gets three com
 ## Install
 
 ```bash
-git clone <repo> ~/develop/nsa/beadhouse
-~/develop/nsa/beadhouse/install
+git clone https://github.com/nsa-brant/beadhouse.git
+cd beadhouse
+./install
 ```
 
 Requires: `git`, `jq`, `gh` (GitHub CLI), `bd` (bead CLI)
@@ -54,7 +55,7 @@ Lives at the root of each project repo. Tells `work-bead` how to set up worktree
 ```json
 {
   "$schema": "https://raw.githubusercontent.com/nsa-brant/beadhouse/master/beadhouse.schema.json",
-  "worktreePath": "~/develop/nsa/worktrees/{{project}}/{{slug}}",
+  "worktreePath": "~/worktrees/{{project}}/{{slug}}",
   "branchPattern": "feature/{{slug}}",
   "envFiles": [".env", ".env.local"],
   "setup": ["npm install"],
@@ -66,7 +67,7 @@ Lives at the root of each project repo. Tells `work-bead` how to set up worktree
 
 | Field | Default | Description |
 |-------|---------|-------------|
-| `worktreePath` | `~/develop/nsa/worktrees/{{project}}/{{slug}}` | Where worktrees are created |
+| `worktreePath` | `~/worktrees/{{project}}/{{slug}}` | Where worktrees are created |
 | `branchPattern` | `{{slug}}` | Branch naming pattern |
 | `envFiles` | `[".env"]` | Files copied from main repo into each worktree |
 | `setup` | `[]` | Commands run inside the worktree after creation |
