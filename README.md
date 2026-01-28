@@ -53,6 +53,7 @@ Lives at the root of each project repo. Tells `work-bead` how to set up worktree
 
 ```json
 {
+  "$schema": "https://raw.githubusercontent.com/nsa-brant/beadhouse/master/beadhouse.schema.json",
   "worktreePath": "~/develop/nsa/worktrees/{{project}}/{{slug}}",
   "branchPattern": "feature/{{slug}}",
   "envFiles": [".env", ".env.local"],

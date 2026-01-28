@@ -51,6 +51,7 @@ Write the confirmed config to `beadhouse.json` at the repo root. Use the schema:
 
 ```json
 {
+  "$schema": "https://raw.githubusercontent.com/nsa-brant/beadhouse/master/beadhouse.schema.json",
   "worktreePath": "~/develop/nsa/worktrees/{{project}}/{{slug}}",
   "branchPattern": "{{slug}}",
   "envFiles": [".env"],
@@ -59,4 +60,4 @@ Write the confirmed config to `beadhouse.json` at the repo root. Use the schema:
 }
 ```
 
-Omit fields that match defaults to keep the file minimal.
+Always include the `$schema` line. Omit other fields that match defaults to keep the file minimal.

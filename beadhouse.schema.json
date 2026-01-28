@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/nsa-brant/beadhouse/master/beadhouse.schema.json",
+  "title": "beadhouse.json",
+  "description": "Per-project worktree configuration for beads.",
+  "type": "object",
+  "properties": {
+    "worktreePath": {
+      "type": "string",
+      "description": "Path template for worktree creation. Supports {{project}}, {{slug}}, {{bead-id}}.",
+      "default": "~/develop/nsa/worktrees/{{project}}/{{slug}}"
+    },
+    "branchPattern": {
+      "type": "string",
+      "description": "Branch name template. Supports {{slug}}, {{bead-id}}, {{project}}.",
+      "default": "{{slug}}"
+    },
+    "envFiles": {
+      "type": "array",
+      "description": "Files to copy from the main repo into each worktree.",
+      "items": {
+        "type": "string"
+      },
+      "default": [".env"]
+    },
+    "setup": {
+      "type": "array",
+      "description": "Commands to run inside the worktree after creation.",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "warnings": {
+      "type": "array",
+      "description": "Replicability warnings detected by /beadhouse.",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    }
+  },
+  "additionalProperties": false
+}
