@@ -5,14 +5,16 @@
 
 ## Step 0. Resolve bead
 
+**YOU MUST resolve the bead yourself. NEVER tell the user to run a bd command themselves. NEVER suggest they run `bd ready`, `bd list`, `bd hook`, etc. YOU do the lookup and present choices.**
+
 If `$ARGUMENTS` is provided:
-- If it looks like a bead ID (e.g. hex string, UUID-like), use it directly: `bd show <id> --json`
-- Otherwise, treat it as a **fuzzy search term**. Run `bd list --status open --json` to get all open beads. Search their titles for a substring/fuzzy match against `$ARGUMENTS`. If exactly one match, use that bead. If multiple matches, show them to the user with `AskUserQuestion` and let them pick. If no matches, tell the user nothing matched and stop.
+- If it looks like a bead ID (e.g. starts with `bd-` or is a hex/hash string), use it directly: run `bd show <id> --json`
+- Otherwise, treat it as a **fuzzy search term**. Run `bd list --status open --json` to get all open beads. Search their titles for a case-insensitive substring match against `$ARGUMENTS`. If exactly one match, use that bead. If multiple matches, present them with `AskUserQuestion` and let the user pick. If no matches, tell the user nothing matched and stop.
 
 If `$ARGUMENTS` is empty:
-- Run `bd list --status open --json` and `bd list --status in_progress --json` to get all actionable beads.
-- Present them to the user with `AskUserQuestion` (show ID + title for each, max 4 options — if more than 4, show the first 4 and include a note that they can pass a search term).
-- Use the selected bead.
+1. Run `bd list --status open --json` and `bd list --status in_progress --json` to get all actionable beads.
+2. You MUST present the results to the user with `AskUserQuestion` (show ID + title for each, max 4 options). If more than 4, show the first 4 and note they can pass a search term like `/work-bead auth`.
+3. Use the bead the user selects.
 
 ## Steps
 
