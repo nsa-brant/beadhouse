@@ -28,9 +28,7 @@ If `$ARGUMENTS` is empty:
 
 If the worktree already existed (work-bead is idempotent), just report the path and confirm the bead is pinned.
 
-### 8. Switch to worktree
-After setup, `cd` into the worktree directory so all subsequent work happens there:
-```bash
-cd <worktree-path>
-```
-Confirm to the user that you're now working in the worktree.
+### 8. Work in the worktree
+The Bash tool resets its working directory between calls, so `cd` will not persist. Instead, for ALL subsequent Bash commands in this conversation, prefix them with `cd <worktree-path> &&`. For file reads/edits/writes, use absolute paths rooted in the worktree.
+
+Tell the user: "All commands will now run in `<worktree-path>`. Ready to work on the bead."

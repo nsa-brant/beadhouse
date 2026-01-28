@@ -36,9 +36,9 @@ If yes:
 
 If no, just report the bead ID and tell the user they can run `/work-bead <bead-id>` later.
 
-### 5. Switch to worktree
-If the user started working (step 4 = yes), `cd` into the worktree directory so all subsequent work happens there:
-```bash
-cd <worktree-path>
-```
-Confirm to the user that you're now working in the worktree.
+### 5. Work in the worktree
+If the user started working (step 4 = yes):
+
+The Bash tool resets its working directory between calls, so `cd` will not persist. Instead, for ALL subsequent Bash commands in this conversation, prefix them with `cd <worktree-path> &&`. For file reads/edits/writes, use absolute paths rooted in the worktree.
+
+Tell the user: "All commands will now run in `<worktree-path>`. Ready to work on the bead."
