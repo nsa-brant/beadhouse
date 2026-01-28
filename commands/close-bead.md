@@ -10,7 +10,7 @@ If `$ARGUMENTS` is provided:
 - Otherwise, treat it as a **fuzzy search term**. Run `bd list --status in_progress --json` to get in-progress beads. Search their titles for a substring/fuzzy match against `$ARGUMENTS`. If exactly one match, use that bead. If multiple matches, show them to the user with `AskUserQuestion` and let them pick. If no matches, tell the user nothing matched and stop.
 
 If `$ARGUMENTS` is empty:
-- First check for a pinned bead: `bd pinned --json`. If one is pinned, use it.
+- First check for a hooked bead: `bd hook --json`. If one is on the hook, use it.
 - Otherwise, run `bd list --status in_progress --json` to get all in-progress beads.
 - Present them to the user with `AskUserQuestion` (show ID + title for each, max 4 options — if more than 4, show the first 4 and include a note that they can pass a search term).
 - Use the selected bead.
