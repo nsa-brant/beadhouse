@@ -11,3 +11,12 @@ Parse `$ARGUMENTS` as a bead ID. Then:
 7. Report to the user: the worktree path, bead title, branch name, and a summary of what was set up.
 
 If the worktree already existed (work-bead is idempotent), just report the path and confirm the bead is pinned.
+
+### 8. Offer to launch Claude in worktree
+Ask: "Would you like to open a new Claude Code session in the worktree?"
+
+If yes, run:
+```bash
+osascript -e 'tell application "Terminal" to do script "cd <worktree-path> && claude"'
+```
+Use the absolute worktree path. This opens a new Terminal tab with Claude running in the worktree directory.
