@@ -37,14 +37,18 @@ Also check for symlinks with `Bash`: `find <repo-root> -maxdepth 2 -type l 2>/de
 If any replicability issues were found, clearly explain each one and what it means for worktree usage.
 
 ### 5. Prompt user for config
-Based on detection, propose:
-- **worktreePath**: default `~/develop/nsa/worktrees/{{project}}/{{slug}}`
-- **branchPattern**: default `{{slug}}`
-- **envFiles**: detected `.env*` files, default `[".env"]`
-- **setup**: inferred setup commands (e.g. `npm install` for Node, `pip install -r requirements.txt` for Python)
-- **warnings**: list of detected warnings (strings)
+First, **print the proposed config as a formatted JSON code block** in your text output so the user can read it clearly:
 
-Use `AskUserQuestion` to confirm or let the user modify these values.
+```
+Here's the proposed beadhouse.json:
+```
+
+Then show the full JSON with proper formatting. After that, use `AskUserQuestion` with **short, simple options** — do NOT put config values in the option labels or descriptions. Use options like:
+
+- "Looks good" — Write this config as-is
+- "Edit config" — I want to change something before writing
+
+If the user wants to edit, ask specific follow-up questions about what to change (worktree path, branch pattern, env files, setup commands, etc.) one at a time.
 
 ### 6. Write beadhouse.json
 Write the confirmed config to `beadhouse.json` at the repo root. Use the schema:
