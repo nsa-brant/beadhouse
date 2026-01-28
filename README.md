@@ -106,6 +106,29 @@ All fields are optional. Omit any that match the default.
 }
 ```
 
+## Suggested CLAUDE.md snippet
+
+Add this to your `~/.claude/CLAUDE.md` so Claude proactively suggests bead commands during conversation:
+
+```markdown
+## Beadhouse
+When the user mentions creating a task, starting work on something, or wrapping up work, proactively suggest the relevant bead command:
+- Starting a new task → offer `/create-bead`
+- Picking up existing work → offer `/work-bead`
+- Finishing up / done with work → offer `/close-bead`
+
+Don't force it — just mention it naturally if the context fits.
+```
+
+## Bead resolution
+
+All bead commands support flexible input:
+- **No argument** → shows a picker of open/in-progress beads
+- **Bead ID** → uses it directly
+- **Fuzzy text** → searches bead titles (e.g. `/work-bead auth` finds "Add authentication")
+
+`/close-bead` with no argument checks for a pinned bead first.
+
 ## How it works
 
 ```
