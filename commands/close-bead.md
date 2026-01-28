@@ -17,7 +17,20 @@ If `$ARGUMENTS` is empty:
 3. You MUST present the results to the user with `AskUserQuestion` (show ID + title for each, max 4 options). If more than 4, show the first 4 and note they can pass a search term like `/close-bead auth`.
 4. Use the bead the user selects.
 
-## Steps
+## Turbo mode
+
+If `$ARGUMENTS` contains the word `turbo` (e.g. `/close-bead turbo` or `/close-bead auth turbo`), skip ALL confirmation prompts and execute everything automatically:
+1. Resolve the bead (strip "turbo" from the search term)
+2. Commit all changes with an auto-generated message
+3. Push and create PR
+4. Monitor CI checks
+5. Merge on green (squash + delete branch)
+6. Close bead
+7. Update changelog
+
+If CI fails, stop and report — do NOT merge. Otherwise, no questions asked.
+
+## Steps (normal mode)
 
 ### 1. Get bead info
 Run `bd show <bead-id> --json` to get the bead title and status.
